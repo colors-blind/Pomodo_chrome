@@ -1,11 +1,14 @@
 const DEFAULT_MINUTES = 15;
 const MIN_MINUTES = 1;
 const MAX_MINUTES = 120;
+const STORAGE_KEY_TOMATO_COUNT = "pomodoro_tomato_count";
+const MAX_DISPLAY_TOMATOES = 10;
 
 let workDurationSeconds = DEFAULT_MINUTES * 60;
 let remainingSeconds = workDurationSeconds;
 let timerId = null;
 let isRunning = false;
+let tomatoCount = 0;
 
 const timeEl = document.getElementById("time");
 const startBtn = document.getElementById("startBtn");
@@ -13,6 +16,8 @@ const pauseBtn = document.getElementById("pauseBtn");
 const resetBtn = document.getElementById("resetBtn");
 const minutesInput = document.getElementById("minutesInput");
 const presetButtons = document.querySelectorAll(".preset-btn");
+const tomatoContainer = document.getElementById("tomatoContainer");
+const tomatoCountEl = document.getElementById("tomatoCount");
 
 function formatTime(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60)
@@ -34,11 +39,60 @@ function stopTimer() {
   isRunning = false;
 }
 
-function tick() {
+function createTomatoElement() {
+  const tomato = document.createElement("div");
+  tomato.className = "tomato";
+  return tomato;
+}
+
+function updateTomatoDisplay() {
+  tomatoCountEl.textContent = tomatoCount;
+  tomatoContainer.innerHTML = "";
+
+  const displayCount = Math.min(tomatoCount, MAX_DISPLAY_TOMATOES);
+  for (let i = 0; i < displayCount; i++) {
+    tomatoContainer.appendChild(createTomatoElement());
+  }
+
+  if (tomatoCount > MAX_DISPLAY_TOMATOES) {
+    const moreIndicator = document.createElement("span");
+    moreIndicator.style.fontSize = "12px";
+    moreIndicator.style.color = "#666";
+    moreIndicator.textContent = "+";
+    tomatoContainer.appendChild(moreIndicator);
+  }
+}
+
+async function loadTomatoCount() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get([STORAGE_KEY_TOMATO_COUNT], (result) => {
+      const count = result[STORAGE_KEY_TOMATO_COUNT] || 0;
+      resolve(count);
+    });
+  });
+}
+
+async function saveTomatoCount(count) {
+  return new Promise((resolve) => {
+    chrome.storage.local.set(
+      { [STORAGE_KEY_TOMATO_COUNT]: count },
+      resolve
+    );
+  });
+}
+
+async function incrementTomatoCount() {
+  tomatoCount += 1;
+  await saveTomatoCount(tomatoCount);
+  updateTomatoDisplay();
+}
+
+async function tick() {
   if (remainingSeconds <= 0) {
     stopTimer();
     const minutes = Math.floor(workDurationSeconds / 60);
-    alert(`${minutes}分钟结束，休息一下吧！`);
+    await incrementTomatoCount();
+    alert(`${minutes}分钟结束，休息一下吧！\n\n已完成 ${tomatoCount} 个番茄`);
     enableTimeInput();
     return;
   }
@@ -126,4 +180,10 @@ presetButtons.forEach((btn) => {
   });
 });
 
-updateDisplay();
+async function init() {
+  tomatoCount = await loadTomatoCount();
+  updateTomatoDisplay();
+  updateDisplay();
+}
+
+init();

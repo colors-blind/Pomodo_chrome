@@ -20,6 +20,68 @@ h1 {
   font-size: 20px;
 }
 
+.achievement-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 8px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-label {
+  font-size: 13px;
+  color: #666;
+}
+
+.tomato-container {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.tomato {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tomato::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 5px;
+  background: #4caf50;
+  border-radius: 50% 50% 0 0;
+  z-index: 2;
+}
+
+.tomato::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 18px;
+  height: 14px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 50%, #e04040 100%);
+  border-radius: 50%;
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.1),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.tomato-count {
+  font-size: 14px;
+  font-weight: bold;
+  color: #e04040;
+}
+
 .time-input-section {
   margin-bottom: 14px;
 }
