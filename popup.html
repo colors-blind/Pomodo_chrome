@@ -9,6 +9,26 @@
   <body>
     <main class="container">
       <h1>番茄时间</h1>
+      <div id="timeInputSection" class="time-input-section">
+        <label for="minutesInput">专注时间（分钟）：</label>
+        <div class="input-wrapper">
+          <input
+            type="number"
+            id="minutesInput"
+            min="1"
+            max="120"
+            value="15"
+          />
+          <span class="unit">分钟</span>
+        </div>
+        <div class="preset-buttons">
+          <button class="preset-btn" data-minutes="5">5分钟</button>
+          <button class="preset-btn" data-minutes="10">10分钟</button>
+          <button class="preset-btn active" data-minutes="15">15分钟</button>
+          <button class="preset-btn" data-minutes="25">25分钟</button>
+          <button class="preset-btn" data-minutes="30">30分钟</button>
+        </div>
+      </div>
       <p id="time" class="time">15:00</p>
       <div class="actions">
         <button id="startBtn">开始</button>

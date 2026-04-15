@@ -5,7 +5,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  width: 260px;
+  width: 300px;
   background: #f7f7f7;
   color: #222;
 }
@@ -18,6 +18,83 @@ body {
 h1 {
   margin: 0 0 10px;
   font-size: 20px;
+}
+
+.time-input-section {
+  margin-bottom: 14px;
+}
+
+.time-input-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+#minutesInput {
+  width: 80px;
+  padding: 8px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#minutesInput:focus {
+  border-color: #4a90d9;
+}
+
+#minutesInput:disabled {
+  background: #eee;
+  cursor: not-allowed;
+}
+
+.unit {
+  font-size: 14px;
+  color: #666;
+}
+
+.preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.preset-btn {
+  padding: 6px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.preset-btn:hover:not(:disabled) {
+  border-color: #4a90d9;
+  background: #f0f7ff;
+}
+
+.preset-btn.active {
+  border-color: #4a90d9;
+  background: #4a90d9;
+  color: #fff;
+}
+
+.preset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .time {
