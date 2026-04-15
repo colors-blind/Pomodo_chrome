@@ -9,11 +9,22 @@
   <body>
     <main class="container">
       <h1>番茄时间</h1>
-      <div class="achievement-section">
-        <span class="achievement-label">已完成：</span>
-        <div class="tomato-container" id="tomatoContainer"></div>
-        <span class="tomato-count" id="tomatoCount">0</span>
-        <span class="achievement-label">个番茄</span>
+      <div class="stats-section">
+        <div class="stat-item">
+          <div class="stat-label">已完成</div>
+          <div class="stat-value tomato-stat">
+            <div class="tomato-container" id="tomatoContainer"></div>
+            <span class="tomato-count" id="tomatoCount">0</span>
+            <span class="stat-unit">个番茄</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">累计专注</div>
+          <div class="stat-value time-stat">
+            <span class="time-count" id="totalTimeCount">0</span>
+            <span class="stat-unit" id="totalTimeUnit">分钟</span>
+          </div>
+        </div>
       </div>
       <div id="timeInputSection" class="time-input-section">
         <label for="minutesInput">专注时间（分钟）：</label>

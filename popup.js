@@ -2,6 +2,7 @@ const DEFAULT_MINUTES = 15;
 const MIN_MINUTES = 1;
 const MAX_MINUTES = 120;
 const STORAGE_KEY_TOMATO_COUNT = "pomodoro_tomato_count";
+const STORAGE_KEY_TOTAL_MINUTES = "pomodoro_total_minutes";
 const MAX_DISPLAY_TOMATOES = 10;
 
 let workDurationSeconds = DEFAULT_MINUTES * 60;
@@ -9,6 +10,7 @@ let remainingSeconds = workDurationSeconds;
 let timerId = null;
 let isRunning = false;
 let tomatoCount = 0;
+let totalMinutes = 0;
 
 const timeEl = document.getElementById("time");
 const startBtn = document.getElementById("startBtn");
@@ -18,6 +20,8 @@ const minutesInput = document.getElementById("minutesInput");
 const presetButtons = document.querySelectorAll(".preset-btn");
 const tomatoContainer = document.getElementById("tomatoContainer");
 const tomatoCountEl = document.getElementById("tomatoCount");
+const totalTimeCountEl = document.getElementById("totalTimeCount");
+const totalTimeUnitEl = document.getElementById("totalTimeUnit");
 
 function formatTime(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60)
@@ -27,8 +31,26 @@ function formatTime(totalSeconds) {
   return `${minutes}:${seconds}`;
 }
 
+function formatTotalTime(minutes) {
+  if (minutes < 60) {
+    return { value: minutes, unit: "分钟" };
+  }
+  const hours = Math.floor(minutes / 60);
+  const remainingMins = minutes % 60;
+  if (remainingMins === 0) {
+    return { value: hours, unit: "小时" };
+  }
+  return { value: `${hours}.${remainingMins}`, unit: "小时" };
+}
+
 function updateDisplay() {
   timeEl.textContent = formatTime(remainingSeconds);
+}
+
+function updateTotalTimeDisplay() {
+  const { value, unit } = formatTotalTime(totalMinutes);
+  totalTimeCountEl.textContent = value;
+  totalTimeUnitEl.textContent = unit;
 }
 
 function stopTimer() {
@@ -81,18 +103,43 @@ async function saveTomatoCount(count) {
   });
 }
 
-async function incrementTomatoCount() {
+async function loadTotalMinutes() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get([STORAGE_KEY_TOTAL_MINUTES], (result) => {
+      const minutes = result[STORAGE_KEY_TOTAL_MINUTES] || 0;
+      resolve(minutes);
+    });
+  });
+}
+
+async function saveTotalMinutes(minutes) {
+  return new Promise((resolve) => {
+    chrome.storage.local.set(
+      { [STORAGE_KEY_TOTAL_MINUTES]: minutes },
+      resolve
+    );
+  });
+}
+
+async function addCompletedSession(sessionMinutes) {
   tomatoCount += 1;
-  await saveTomatoCount(tomatoCount);
+  totalMinutes += sessionMinutes;
+  await Promise.all([
+    saveTomatoCount(tomatoCount),
+    saveTotalMinutes(totalMinutes),
+  ]);
   updateTomatoDisplay();
+  updateTotalTimeDisplay();
 }
 
 async function tick() {
   if (remainingSeconds <= 0) {
     stopTimer();
     const minutes = Math.floor(workDurationSeconds / 60);
-    await incrementTomatoCount();
-    alert(`${minutes}分钟结束，休息一下吧！\n\n已完成 ${tomatoCount} 个番茄`);
+    await addCompletedSession(minutes);
+    alert(
+      `${minutes}分钟结束，休息一下吧！\n\n已完成 ${tomatoCount} 个番茄，累计专注 ${formatTotalTime(totalMinutes).value} ${formatTotalTime(totalMinutes).unit}`
+    );
     enableTimeInput();
     return;
   }
@@ -181,8 +228,12 @@ presetButtons.forEach((btn) => {
 });
 
 async function init() {
-  tomatoCount = await loadTomatoCount();
+  [tomatoCount, totalMinutes] = await Promise.all([
+    loadTomatoCount(),
+    loadTotalMinutes(),
+  ]);
   updateTomatoDisplay();
+  updateTotalTimeDisplay();
   updateDisplay();
 }
 
