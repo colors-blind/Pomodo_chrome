@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Simple Pomodoro Timer",
+  "version": "1.0.0",
+  "description": "A simple 15-minute pomodoro timer extension.",
+  "action": {
+    "default_title": "Pomodoro",
+    "default_popup": "popup.html"
+  }
+}
