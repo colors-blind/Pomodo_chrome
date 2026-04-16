@@ -5,7 +5,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  width: 300px;
+  width: 320px;
   background: #f7f7f7;
   color: #222;
 }
@@ -16,25 +16,40 @@ body {
 }
 
 h1 {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-size: 20px;
 }
 
-.achievement-section {
+.stats-section {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  gap: 8px;
   margin-bottom: 14px;
-  padding: 8px;
+}
+
+.stat-item {
+  flex: 1;
+  padding: 10px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.achievement-label {
-  font-size: 13px;
-  color: #666;
+.stat-label {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 14px;
+}
+
+.tomato-stat {
+  flex-wrap: wrap;
 }
 
 .tomato-container {
@@ -44,8 +59,8 @@ h1 {
 }
 
 .tomato {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   position: relative;
   flex-shrink: 0;
 }
@@ -56,8 +71,8 @@ h1 {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 8px;
-  height: 5px;
+  width: 7px;
+  height: 4px;
   background: #4caf50;
   border-radius: 50% 50% 0 0;
   z-index: 2;
@@ -66,20 +81,33 @@ h1 {
 .tomato::after {
   content: "";
   position: absolute;
-  top: 4px;
+  top: 3px;
   left: 0;
-  width: 18px;
-  height: 14px;
+  width: 16px;
+  height: 13px;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 50%, #e04040 100%);
   border-radius: 50%;
-  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.1),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.2);
+  box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.1),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.2);
 }
 
 .tomato-count {
-  font-size: 14px;
   font-weight: bold;
   color: #e04040;
+}
+
+.time-stat {
+  font-weight: bold;
+}
+
+.time-count {
+  color: #4a90d9;
+  font-size: 18px;
+}
+
+.stat-unit {
+  font-size: 12px;
+  color: #888;
 }
 
 .time-input-section {
